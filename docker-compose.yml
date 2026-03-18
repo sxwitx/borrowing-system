@@ -2,38 +2,35 @@ version: '3.8'
 services:
   web:
     build: .
-    container_name: borrowing_app_web    # 🌐 เปลี่ยนชื่อตามที่อาจารย์กำหนด
+    container_name: equipment_app_web
     ports:
-      - "8082:80"                        # หลบพอร์ต 8080 ของงานเก่า เข้าเว็บผ่าน localhost:8082
+      - "8080:80"
     volumes:
       - ./:/var/www/html
     depends_on:
       - db
-      
   db:
     image: mysql:8.0
-    container_name: borrowings_db        # 🗄️ เปลี่ยนชื่อตามที่อาจารย์กำหนด
+    container_name: sports_app_db
     restart: always
     environment:
-      MYSQL_DATABASE: borrowings_db
+      MYSQL_DATABASE: sports_borrow_db
       MYSQL_USER: dev_user
       MYSQL_PASSWORD: dev_password
       MYSQL_ROOT_PASSWORD: rootpassword
     ports:
-      - "3307:3306"                      # หลบพอร์ต 3306 ของงานเก่า
+      - "3306:3306"
     volumes:
-      - db_data_hw9:/var/lib/mysql       # ใช้ Volume ใหม่ ไม่กวนข้อมูลเดิม
-      
+      - db_data:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: borrowing_app_pma    # 🛠️ ปรับชื่อให้เข้าชุดกัน
+    container_name: sports_app_pma
     ports:
-      - "8083:80"                        # หลบพอร์ต 8081 ของงานเก่า เข้าผ่าน localhost:8083
+      - "8081:80"
     environment:
-      PMA_HOST: db                       # ให้ชี้ไปที่ชื่อ Service (db) เหมือนเดิม
+      PMA_HOST: db
       MYSQL_ROOT_PASSWORD: rootpassword
     depends_on:
       - db
-
 volumes:
-  db_data_hw9:                           # ประกาศ Volume ใหม่สำหรับงานนี้โดยเฉพาะ
+  db_data:
